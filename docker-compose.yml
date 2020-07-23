@@ -3,26 +3,28 @@ version: '2'
 #letsencrypt server (nginx)
 
 services:
-#  letsencrypt:
-#    image: linuxserver/letsencrypt
-#    container_name: letsencrypt
-#    cap_add:
-#      - NET_ADMIN
-#    environment:
-#      - PUID=1000
-#      - PGID=1000
-#      - TZ=Asia/Tokyo
-#      - URL=lemokids.f5.si
-#      - SUBDOMAINS=event
-#      - VALIDATION=http
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    restart: unless-stopped
-#    links:
-#      - wordpress
-#    volumes:
-#      - letsencrypt-config:/config
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Tokyo
+      - URL=lemokids.f5.si
+      - SUBDOMAINS=event
+      - VALIDATION=http
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    links:
+      - wordpress
+    volumes:
+      - letsencrypt-config:/config
+    extra_hosts:
+      - "local_dev:$LOCAL_HOST_IP"
 
   wordpress-mariadb:
     image: mariadb
@@ -39,7 +41,7 @@ services:
   wordpress:
     image: wordpress:latest
     ports:
-      - "80:80"
+      - "8080:80"
     links:
       - wordpress-mariadb
     restart: always
